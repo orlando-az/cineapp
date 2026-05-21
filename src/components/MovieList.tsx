@@ -7,15 +7,9 @@ interface MovieListProps {
 
 const MovieList = ({ peliculas }: MovieListProps) => {
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-        gap: "1.25rem",
-      }}
-    >
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
       {peliculas.map((p) => (
-        <MovieCard pelicula={p} />
+        <MovieCard key={p.titulo} pelicula={p} />
       ))}
     </div>
   );

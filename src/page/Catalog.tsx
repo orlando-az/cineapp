@@ -14,185 +14,91 @@ const Catalog = () => {
 
   const { peliculas, cargando } = useMovie();
 
-  // const peliculasFiltradas = Peliculas.filter((p) => {
-  //   return p.titulo.toLowerCase().includes(busqueda.toLowerCase());
-  // });
-
   const peliculasFiltradas =
     generoActivo === "Todos"
       ? peliculas
       : peliculas.filter(
-          (p) => p.genero.toLowerCase() == generoActivo.toLowerCase(),
+          (p) => p.genero.toLowerCase() === generoActivo.toLowerCase(),
         );
 
-  if (cargando) return <p>Cargando Peliculas...</p>;
-  return (
-    <div
-      style={{
-        fontFamily: "'Georgia', 'Times New Roman', serif",
-        backgroundColor: "#1e1a2e",
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        color: "#e8e0d0",
-      }}
-    >
-      <HeaderTitle
-        titulo="Cine App"
-        descripcion="Visualizar tus peliculas favoritas"
-      />
+  if (cargando)
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <p className="text-gray-400">Cargando películas...</p>
+      </div>
+    );
 
-      {/* Sección contador / nombre */}
-      <div
-        style={{
-          margin: "2rem auto",
-          width: "90%",
-          maxWidth: "480px",
-          backgroundColor: "#2a2540",
-          border: "1px solid #3d3660",
-          borderRadius: "12px",
-          padding: "1.5rem 2rem",
-          display: "flex",
-          flexDirection: "column",
-          gap: "0.75rem",
-        }}
-      >
-        <p
-          style={{
-            margin: 0,
-            fontSize: "0.75rem",
-            letterSpacing: "0.15em",
-            textTransform: "uppercase",
-            color: "#c9a84c",
-          }}
-        >
-          Panel de prueba
+  return (
+    <div className="min-h-screen bg-gray-900 text-white flex flex-col">
+      <HeaderTitle titulo="Cine App" descripcion="Visualizar tus peliculas favoritas" />
+
+      {/* Panel de prueba */}
+      <div className="mx-auto my-6 w-full max-w-sm bg-gray-800 border border-gray-700 rounded-xl p-5 flex flex-col gap-3">
+        <p className="text-xs uppercase tracking-widest text-gray-400">Panel de prueba</p>
+
+        <p className="text-3xl font-bold text-white">
+          {contador} <span className="text-base font-normal text-gray-400">claps</span>
         </p>
 
-        <h2
-          style={{
-            margin: 0,
-            fontSize: "2rem",
-            fontWeight: "normal",
-            color: "#f0e6cc",
-          }}
-        >
-          {contador}{" "}
-          <span style={{ fontSize: "1rem", color: "#9b92b8" }}>claps</span>
-        </h2>
-
-        <div style={{ display: "flex", gap: "0.5rem" }}>
+        <div className="flex gap-2">
           <button
             onClick={() => setContador(contador + 1)}
-            style={{
-              flex: 1,
-              padding: "0.5rem",
-              backgroundColor: "#c9a84c",
-              color: "#1e1a2e",
-              border: "none",
-              borderRadius: "6px",
-              cursor: "pointer",
-              fontFamily: "inherit",
-              fontWeight: "bold",
-              fontSize: "0.9rem",
-            }}
+            className="flex-1 py-2 bg-yellow-400 text-gray-900 rounded-lg font-semibold text-sm hover:bg-yellow-300 transition-colors"
           >
             👏 Dar Clap
           </button>
           <button
             onClick={() => setContador(0)}
-            style={{
-              padding: "0.5rem 1rem",
-              backgroundColor: "transparent",
-              color: "#9b92b8",
-              border: "1px solid #3d3660",
-              borderRadius: "6px",
-              cursor: "pointer",
-              fontFamily: "inherit",
-              fontSize: "0.9rem",
-            }}
+            className="px-4 py-2 border border-gray-600 text-gray-400 rounded-lg text-sm hover:border-gray-400 transition-colors"
           >
             Reset
           </button>
         </div>
 
-        <div style={{ borderTop: "1px solid #3d3660", paddingTop: "0.75rem" }}>
-          <label
-            style={{
-              display: "block",
-              fontSize: "0.75rem",
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "#9b92b8",
-              marginBottom: "0.4rem",
-            }}
-          >
-            Tu nombre
-          </label>
+        <div className="border-t border-gray-700 pt-3 flex flex-col gap-1">
+          <label className="text-xs text-gray-400 uppercase tracking-wide">Tu nombre</label>
           <input
             value={nombre}
             onChange={(e) => setNombre(e.target.value)}
             placeholder="Escribe tu nombre..."
-            style={{
-              width: "100%",
-              padding: "0.5rem 0.75rem",
-              backgroundColor: "#1e1a2e",
-              border: "1px solid #3d3660",
-              borderRadius: "6px",
-              color: "#e8e0d0",
-              fontFamily: "inherit",
-              fontSize: "0.95rem",
-              outline: "none",
-              boxSizing: "border-box",
-            }}
+            className="w-full py-2 px-3 bg-gray-900 border border-gray-600 rounded-lg text-white text-sm outline-none placeholder:text-gray-600 focus:border-gray-400"
           />
-          {nombre && (
-            <p
-              style={{
-                margin: "0.5rem 0 0",
-                color: "#c9a84c",
-                fontSize: "0.9rem",
-              }}
-            >
-              Bienvenido, {nombre}
-            </p>
-          )}
+          {nombre && <p className="text-yellow-400 text-sm">Bienvenido, {nombre}</p>}
         </div>
       </div>
 
-      {/* Grid de películas */}
-      <div style={{ padding: "0 5%", flex: 1 }}>
-        <p
-          style={{
-            fontSize: "0.7rem",
-            letterSpacing: "0.2em",
-            textTransform: "uppercase",
-            color: "#6e678a",
-            marginBottom: "1rem",
-          }}
-        >
-          Películas destacadas
-        </p>
-        {Generos.map((genero) => (
-          <button key={genero} onClick={() => setGeneroActivo(genero)}>
-            {genero}
-          </button>
-        ))}
-        <p>{generoActivo}</p>
+      {/* Catálogo */}
+      <div className="px-6 flex-1">
+        <p className="text-xs uppercase tracking-widest text-gray-500 mb-3">Películas destacadas</p>
+
+        <div className="flex flex-wrap gap-2 mb-4">
+          {Generos.map((genero) => (
+            <button
+              key={genero}
+              onClick={() => setGeneroActivo(genero)}
+              className={`px-3 py-1 rounded-full text-sm border transition-colors ${
+                generoActivo === genero
+                  ? "bg-yellow-400 text-gray-900 border-yellow-400 font-semibold"
+                  : "border-gray-600 text-gray-400 hover:border-gray-400 hover:text-white"
+              }`}
+            >
+              {genero}
+            </button>
+          ))}
+        </div>
+
         <input
           type="text"
-          placeholder="Busqueda de peliculas.."
+          placeholder="Buscar películas..."
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
+          className="w-full max-w-xs py-2 px-3 mb-5 bg-gray-800 border border-gray-600 rounded-lg text-white text-sm outline-none placeholder:text-gray-500 focus:border-gray-400"
         />
-        <p>{busqueda}</p>
 
         <MovieList peliculas={peliculasFiltradas} />
       </div>
 
-      <div style={{ marginTop: "auto" }}>
-        <MovieFooter />
-      </div>
+      <MovieFooter />
     </div>
   );
 };

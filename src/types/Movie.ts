@@ -5,5 +5,5 @@ export interface Movie {
   calificacion: number;
   anio: number;
   sinopsis?: string;
-  directo?: string;
+  director?: string;
 }

@@ -5,9 +5,9 @@ interface HeaderTitlePros {
 
 const HeaderTitle = ({ titulo, descripcion }: HeaderTitlePros) => {
   return (
-    <header className="text-white p-6 bg-blue-950">
-      <h1 className="text-4xl my-2">{titulo}</h1>
-      <p className="font-light text-sm text-blue-50">{descripcion}</p>
+    <header className="p-6 bg-gray-800">
+      <h1 className="text-3xl font-bold text-white">{titulo}</h1>
+      <p className="text-sm text-gray-400 mt-1">{descripcion}</p>
     </header>
   );
 };
