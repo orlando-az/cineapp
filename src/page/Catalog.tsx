@@ -2,52 +2,7 @@ import { useState } from "react";
 import MovieList from "../components/MovieList";
 import MovieFooter from "../components/MovieFooter";
 import HeaderTitle from "../components/HeaderTitle";
-import type { Movie } from "../types/Movie";
-
-const Peliculas: Movie[] = [
-  {
-    id: 1,
-    titulo: "Interestelar",
-    anio: 2000,
-    genero: "Ciencia ficción",
-    calificacion: 9.5,
-  },
-  {
-    id: 2,
-    titulo: "Spiderman",
-    anio: 2010,
-    genero: "Acción",
-    calificacion: 9,
-  },
-  {
-    id: 3,
-    titulo: "El conjuro",
-    anio: 2015,
-    genero: "Terror",
-    calificacion: 8.5,
-  },
-  {
-    id: 4,
-    titulo: "Interestelar",
-    anio: 2000,
-    genero: "Ciencia ficción",
-    calificacion: 9.5,
-  },
-  {
-    id: 5,
-    titulo: "Spiderman",
-    anio: 2010,
-    genero: "Acción",
-    calificacion: 9,
-  },
-  {
-    id: 6,
-    titulo: "El conjuro",
-    anio: 2015,
-    genero: "Terror",
-    calificacion: 8.5,
-  },
-];
+import useMovie from "../hooks/useMovie";
 
 const Generos = ["Todos", "Drama", "Ciencia Ficción", "Animación"];
 
@@ -57,15 +12,20 @@ const Catalog = () => {
   const [busqueda, setBusqueda] = useState<string>("");
   const [generoActivo, setGeneroActivo] = useState<string>("Todos");
 
+  const { peliculas, cargando } = useMovie();
+
   // const peliculasFiltradas = Peliculas.filter((p) => {
   //   return p.titulo.toLowerCase().includes(busqueda.toLowerCase());
   // });
+
   const peliculasFiltradas =
     generoActivo === "Todos"
-      ? Peliculas
-      : Peliculas.filter(
+      ? peliculas
+      : peliculas.filter(
           (p) => p.genero.toLowerCase() == generoActivo.toLowerCase(),
         );
+
+  if (cargando) return <p>Cargando Peliculas...</p>;
   return (
     <div
       style={{

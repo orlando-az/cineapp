@@ -6,13 +6,7 @@ interface MovieCardProps {
 
 const MovieCard = ({ pelicula }: MovieCardProps) => {
   return (
-    <div
-      style={{
-        backgroundColor: "white",
-        border: "1px solid #d1d5db",
-        padding: "1rem",
-      }}
-    >
+    <div className="bg-white border-2 border-blue-950 p-4 shadow rounded-2xl">
       <h3 style={{ marginTop: 0, color: "#2a2540" }}>{pelicula.titulo}</h3>
       <p
         style={{

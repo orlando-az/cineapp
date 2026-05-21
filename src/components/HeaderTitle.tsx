@@ -5,23 +5,9 @@ interface HeaderTitlePros {
 
 const HeaderTitle = ({ titulo, descripcion }: HeaderTitlePros) => {
   return (
-    <header
-      style={{
-        backgroundColor: "#003A61",
-        color: "white",
-        padding: "1rem",
-        marginBottom: "1.5rem",
-      }}
-    >
-      <h1 style={{ margin: 0 }}>{titulo}</h1>
-      <p
-        style={{
-          marginTop: "0.25rem",
-          fontSize: "0.9rem",
-        }}
-      >
-        {descripcion}
-      </p>
+    <header className="text-white p-6 bg-blue-950">
+      <h1 className="text-4xl my-2">{titulo}</h1>
+      <p className="font-light text-sm text-blue-50">{descripcion}</p>
     </header>
   );
 };
