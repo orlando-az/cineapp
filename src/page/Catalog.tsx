@@ -2,7 +2,8 @@ import { useState } from "react";
 import MovieList from "../components/MovieList";
 import MovieFooter from "../components/MovieFooter";
 import HeaderTitle from "../components/HeaderTitle";
-import useMovie from "../hooks/useMovie";
+import useMovie, { type MovieInput } from "../hooks/useMovie";
+import MovieForm from "../components/MovieForm";
 
 const Generos = ["Todos", "Drama", "Ciencia Ficción", "Animación"];
 
@@ -11,8 +12,9 @@ const Catalog = () => {
   const [nombre, setNombre] = useState<string>("");
   const [busqueda, setBusqueda] = useState<string>("");
   const [generoActivo, setGeneroActivo] = useState<string>("Todos");
+  const [panelAbierto, setPanelAbierto] = useState<boolean>(false);
 
-  const { peliculas, cargando, error } = useMovie();
+  const { peliculas, cargando, error, crearPelicula } = useMovie();
 
   const peliculasFiltradas =
     generoActivo === "Todos"
@@ -20,6 +22,21 @@ const Catalog = () => {
       : peliculas.filter(
           (p) => p.genero.toLowerCase() === generoActivo.toLowerCase(),
         );
+
+  const handleNuevaPelicula = () => {
+    setPanelAbierto(true);
+  };
+  const handleCancenlar = () => {
+    setPanelAbierto(false);
+  };
+
+  const handleGuardar = async (datos: MovieInput) => {
+    const exito = await crearPelicula(datos);
+
+    if (exito) {
+      setPanelAbierto(false);
+    }
+  };
 
   if (cargando)
     return (
@@ -43,7 +60,7 @@ const Catalog = () => {
       />
 
       {/* Panel de prueba */}
-      <div className="mx-auto my-6 w-full max-w-sm bg-gray-800 border border-gray-700 rounded-xl p-5 flex flex-col gap-3">
+      {/* <div className="mx-auto my-6 w-full max-w-sm bg-gray-800 border border-gray-700 rounded-xl p-5 flex flex-col gap-3">
         <p className="text-xs uppercase tracking-widest text-gray-400">
           Panel de prueba
         </p>
@@ -82,13 +99,17 @@ const Catalog = () => {
             <p className="text-yellow-400 text-sm">Bienvenido, {nombre}</p>
           )}
         </div>
-      </div>
+      </div> */}
 
       {/* Catálogo */}
       <div className="px-6 flex-1">
         <p className="text-xs uppercase tracking-widest text-gray-500 mb-3">
           Películas destacadas
         </p>
+        <button onClick={handleNuevaPelicula}>Agregar</button>
+        {panelAbierto && (
+          <MovieForm onGuardar={handleGuardar} onCancelar={handleCancenlar} />
+        )}
 
         <div className="flex flex-wrap gap-2 mb-4">
           {Generos.map((genero) => (
