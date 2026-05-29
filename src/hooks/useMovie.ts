@@ -59,7 +59,53 @@ const useMovie = () => {
     return true;
   };
 
-  return { peliculas, cargando, error, crearPelicula };
+  const actualizarPelicula = async (
+    id: number,
+    cambios: MovieInput,
+  ): Promise<boolean> => {
+    setError(null);
+
+    const { error: supabaseError } = await supabase
+      .from("peliculas")
+      .update(cambios)
+      .eq("id", id);
+
+    if (supabaseError) {
+      setError("Error al actualizar: " + supabaseError.message);
+      return false;
+    }
+
+    setPeliculas((prev) =>
+      prev.map((p) => (p.id === id ? { id, ...cambios } : p)),
+    );
+    return true;
+  };
+
+  const eliminarPelicula = async (id: number): Promise<boolean> => {
+    setError(null);
+
+    const { error: supabaseError } = await supabase
+      .from("peliculas")
+      .delete()
+      .eq("id", id);
+
+    if (supabaseError) {
+      setError("Error al eliminar: " + supabaseError.message);
+      return false;
+    }
+
+    setPeliculas((prev) => prev.filter((p) => p.id !== id));
+    return true;
+  };
+
+  return {
+    peliculas,
+    cargando,
+    error,
+    crearPelicula,
+    actualizarPelicula,
+    eliminarPelicula,
+  };
 };
 
 export default useMovie;

@@ -4,17 +4,26 @@ import MovieFooter from "../components/MovieFooter";
 import HeaderTitle from "../components/HeaderTitle";
 import useMovie, { type MovieInput } from "../hooks/useMovie";
 import MovieForm from "../components/MovieForm";
+import type { Movie } from "../types/Movie";
 
 const Generos = ["Todos", "Drama", "Ciencia Ficción", "Animación"];
 
 const Catalog = () => {
-  const [contador, setContador] = useState<number>(0);
-  const [nombre, setNombre] = useState<string>("");
+  // const [contador, setContador] = useState<number>(0);
+  // const [nombre, setNombre] = useState<string>("");
   const [busqueda, setBusqueda] = useState<string>("");
   const [generoActivo, setGeneroActivo] = useState<string>("Todos");
   const [panelAbierto, setPanelAbierto] = useState<boolean>(false);
+  const [peliculaEditando, setPeliculaEditando] = useState<Movie | null>(null);
 
-  const { peliculas, cargando, error, crearPelicula } = useMovie();
+  const {
+    peliculas,
+    cargando,
+    error,
+    crearPelicula,
+    actualizarPelicula,
+    eliminarPelicula,
+  } = useMovie();
 
   const peliculasFiltradas =
     generoActivo === "Todos"
@@ -28,14 +37,35 @@ const Catalog = () => {
   };
   const handleCancenlar = () => {
     setPanelAbierto(false);
+    setPeliculaEditando(null);
   };
 
   const handleGuardar = async (datos: MovieInput) => {
-    const exito = await crearPelicula(datos);
+    let exito: boolean;
+
+    if (peliculaEditando) {
+      console.log(peliculaEditando.id);
+      console.log(datos);
+      exito = await actualizarPelicula(peliculaEditando.id, datos);
+    } else {
+      exito = await crearPelicula(datos);
+    }
 
     if (exito) {
       setPanelAbierto(false);
+      setPeliculaEditando(null);
     }
+  };
+
+  const handleEditarPelicula = (pelicula: Movie) => {
+    setPeliculaEditando(pelicula);
+    setPanelAbierto(true);
+  };
+
+  const handleEliminar = async (id: number) => {
+    if (!confirm("¿Eliminar esta película? Esta acción no se puede deshacer."))
+      return;
+    await eliminarPelicula(id);
   };
 
   if (cargando)
@@ -106,9 +136,19 @@ const Catalog = () => {
         <p className="text-xs uppercase tracking-widest text-gray-500 mb-3">
           Películas destacadas
         </p>
-        <button onClick={handleNuevaPelicula}>Agregar</button>
+        <button
+          onClick={handleNuevaPelicula}
+          className="bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold
+             px-4 py-2 my-4 rounded-lg transition-colors"
+        >
+          + Nueva película
+        </button>
         {panelAbierto && (
-          <MovieForm onGuardar={handleGuardar} onCancelar={handleCancenlar} />
+          <MovieForm
+            pelicula={peliculaEditando ?? undefined}
+            onGuardar={handleGuardar}
+            onCancelar={handleCancenlar}
+          />
         )}
 
         <div className="flex flex-wrap gap-2 mb-4">
@@ -135,7 +175,11 @@ const Catalog = () => {
           className="w-full max-w-xs py-2 px-3 mb-5 bg-gray-800 border border-gray-600 rounded-lg text-white text-sm outline-none placeholder:text-gray-500 focus:border-gray-400"
         />
 
-        <MovieList peliculas={peliculasFiltradas} />
+        <MovieList
+          peliculas={peliculasFiltradas}
+          onEditar={handleEditarPelicula}
+          onEliminar={handleEliminar}
+        />
       </div>
 
       <MovieFooter />
