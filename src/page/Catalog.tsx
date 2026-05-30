@@ -5,6 +5,8 @@ import HeaderTitle from "../components/HeaderTitle";
 import useMovie, { type MovieInput } from "../hooks/useMovie";
 import MovieForm from "../components/MovieForm";
 import type { Movie } from "../types/Movie";
+import Navbar from "../components/Navbar";
+import { useNavigate } from "react-router";
 
 const Generos = ["Todos", "Drama", "Ciencia Ficción", "Animación"];
 
@@ -15,6 +17,8 @@ const Catalog = () => {
   const [generoActivo, setGeneroActivo] = useState<string>("Todos");
   const [panelAbierto, setPanelAbierto] = useState<boolean>(false);
   const [peliculaEditando, setPeliculaEditando] = useState<Movie | null>(null);
+
+  const navigate = useNavigate();
 
   const {
     peliculas,
@@ -38,6 +42,9 @@ const Catalog = () => {
   const handleCancenlar = () => {
     setPanelAbierto(false);
     setPeliculaEditando(null);
+  };
+  const handleVerDetalle = (id: number) => {
+    navigate(`/pelicula/${id}`);
   };
 
   const handleGuardar = async (datos: MovieInput) => {
@@ -84,10 +91,11 @@ const Catalog = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white flex flex-col">
-      <HeaderTitle
+      {/* <HeaderTitle
         titulo="Cine App"
         descripcion="Visualizar tus peliculas favoritas"
-      />
+      /> */}
+      <Navbar />
 
       {/* Panel de prueba */}
       {/* <div className="mx-auto my-6 w-full max-w-sm bg-gray-800 border border-gray-700 rounded-xl p-5 flex flex-col gap-3">
@@ -179,6 +187,7 @@ const Catalog = () => {
           peliculas={peliculasFiltradas}
           onEditar={handleEditarPelicula}
           onEliminar={handleEliminar}
+          onVerDetalle={handleVerDetalle}
         />
       </div>
 

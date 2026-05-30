@@ -4,9 +4,15 @@ interface MovieCardProps {
   pelicula: Movie;
   onEditar: (pelicula: Movie) => void;
   onEliminar: (id: number) => void;
+  onVerDetalle: (id: number) => void;
 }
 
-const MovieCard = ({ onEditar, onEliminar, pelicula }: MovieCardProps) => {
+const MovieCard = ({
+  onEditar,
+  onEliminar,
+  onVerDetalle,
+  pelicula,
+}: MovieCardProps) => {
   const colorCalificacion =
     (pelicula.calificacion ?? 0) >= 8
       ? "text-green-400"
@@ -61,6 +67,14 @@ const MovieCard = ({ onEditar, onEliminar, pelicula }: MovieCardProps) => {
                      transition-colors"
         >
           🗑️ Eliminar
+        </button>
+        <button
+          onClick={() => onVerDetalle(pelicula.id)}
+          className="w-full py-1.5 rounded-lg text-xs font-medium
+             bg-blue-900 text-blue-200 hover:bg-blue-700 hover:text-white
+             transition-colors"
+        >
+          👁 Ver detalle
         </button>
       </div>
     </div>
